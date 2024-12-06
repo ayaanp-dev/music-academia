@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { CircleUser, Menu, BookOpenText, Search, Book } from "lucide-react"
+import { Music } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -24,8 +24,8 @@ export function Navbar() {
             href="#"
             className="flex items-center gap-2 text-lg font-semibold md:text-base"
           >
-            <BookOpenText className="h-6 w-6" />
-            <span className="sr-only">Acme Inc</span>
+            <Music className="h-6 w-6" />
+            <span className="sr-only">Music Academia</span>
           </Link>
           <div className="flex justify-center items-center flex-grow">
             <NavigationMenu className="flex justify-center items-center">
@@ -38,16 +38,16 @@ export function Navbar() {
                   </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link href="#features" legacyBehavior passHref>
+                  <Link href="#programs" legacyBehavior passHref>
                     <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                      Features
+                      Our Programs
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link href="#" legacyBehavior passHref>
+                  <Link href="#about" legacyBehavior passHref>
                     <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                      Examples
+                      About Us
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
@@ -72,7 +72,7 @@ export function Navbar() {
             href="/sign-in"
             className={buttonVariants({ variant: "default" })}
           >
-            Start Prepping
+            Get Started
           </Link>
         </div>
       </header>
