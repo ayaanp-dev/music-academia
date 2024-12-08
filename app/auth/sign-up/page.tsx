@@ -1,9 +1,57 @@
+"use client";
+
+import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 
 export default function SignUpPage() {
+
+  const [parentName, setParentName] = useState("");
+  const [parentEmail, setParentEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
+
+  const handleParentSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!termsAccepted) {
+      alert("You must accept the terms and conditions to sign up.");
+      return;
+    }
+
+    const parentData = {
+      full_name: parentName,
+      email: parentEmail,
+      students: [], // No students during initial signup
+    };
+
+    try {
+      const response = await fetch("http://localhost:8000/parents/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(parentData),
+      });
+
+      if (response.ok) {
+        alert("Parent signed up successfully!");
+        // Reset the form fields
+        setParentName("");
+        setParentEmail("");
+        setPassword("");
+        setTermsAccepted(false);
+      } else {
+        const errorData = await response.json();
+        alert(`Error: ${errorData.detail || "Something went wrong."}`);
+      }
+    } catch (error) {
+      alert(`Network error`);
+    }
+  };
+
   return (
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-6 lg:px-12 max-w-3xl">
@@ -25,9 +73,12 @@ export default function SignUpPage() {
 
           {/* Parent Sign-Up Form */}
           <TabsContent value="parent">
-            <form className="space-y-6 bg-white shadow-md p-6 rounded-lg">
+            <form
+              className="space-y-6 bg-white shadow-md p-6 rounded-lg"
+              onSubmit={handleParentSignUp}
+            >
               <h2 className="text-2xl font-bold text-center">Parent Sign-Up</h2>
-              
+
               {/* Parent's Full Name */}
               <div>
                 <label
@@ -40,6 +91,8 @@ export default function SignUpPage() {
                   id="parent-name"
                   type="text"
                   placeholder="Enter your full name"
+                  value={parentName}
+                  onChange={(e) => setParentName(e.target.value)}
                   required
                 />
               </div>
@@ -56,6 +109,8 @@ export default function SignUpPage() {
                   id="parent-email"
                   type="email"
                   placeholder="Enter your email"
+                  value={parentEmail}
+                  onChange={(e) => setParentEmail(e.target.value)}
                   required
                 />
               </div>
@@ -72,23 +127,27 @@ export default function SignUpPage() {
                   id="password"
                   type="password"
                   placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                 />
               </div>
 
               {/* Terms Checkbox */}
-              <Checkbox id="agree-terms" required>
-                <span className="ml-2 text-sm text-gray-600">
-                  I agree to Music Academia's{" "}
-                  <a href="/terms" className="text-blue-500 underline">
-                    terms and conditions
-                  </a>{" "}
-                  and{" "}
-                  <a href="/privacy" className="text-blue-500 underline">
-                    privacy policy
-                  </a>.
-                </span>
-              </Checkbox>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="terms"
+                  checked={termsAccepted}
+                  onCheckedChange={(checked) => setTermsAccepted(!!checked)}
+                  required
+                />
+                <label
+                  htmlFor="terms"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Accept terms and conditions
+                </label>
+              </div>
 
               {/* Submit Button */}
               <Button type="submit" className="w-full">
@@ -151,18 +210,15 @@ export default function SignUpPage() {
               </div>
 
               {/* Terms Checkbox */}
-              <Checkbox id="agree-terms" required>
-                <span className="ml-2 text-sm text-gray-600">
-                  I agree to Music Academia's{" "}
-                  <a href="/terms" className="text-blue-500 underline">
-                    terms and conditions
-                  </a>{" "}
-                  and{" "}
-                  <a href="/privacy" className="text-blue-500 underline">
-                    privacy policy
-                  </a>.
-                </span>
-              </Checkbox>
+              <div className="flex items-center space-x-2">
+              <Checkbox id="terms" required />
+              <label
+                htmlFor="terms"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+              Accept terms and conditions
+              </label>
+              </div>
 
               {/* Submit Button */}
               <Button type="submit" className="w-full">
