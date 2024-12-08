@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 export default function Footer() {
   return (
-    <footer className="bg-white text-gray-900 py-12 mt-20">
+    <footer className="bg-gray-50 text-gray-900 py-12 mt-20">
       <div className="container mx-auto px-6 lg:px-12">
         <div className="flex flex-col sm:flex-row justify-between items-center space-y-8 sm:space-y-0">
           {/* Column 1: Logo / Branding */}

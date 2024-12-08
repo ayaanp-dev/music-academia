@@ -4,7 +4,7 @@ import ShimmerButton from "@/components/ui/shimmer-button";
 
 export default function Hero() {
   return (
-    <section className="relative py-20 lg:py-32 bg-white dark:bg-black">
+    <section className="relative py-20 lg:py-32 bg-white dark:bg-black" id="home">
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           {/* Left Content */}

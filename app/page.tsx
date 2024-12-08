@@ -4,6 +4,7 @@ import Image from "next/image";
 import AboutUs from "@/components/landing/about";
 import OurPrograms from "@/components/landing/programs";
 import JoinMailingList from "@/components/landing/mailing-list";
+import Testimonials from "@/components/landing/testimonials";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       <OurPrograms />
       <AboutUs />
       <JoinMailingList />
+      <Testimonials />
     </div>
   );
 }

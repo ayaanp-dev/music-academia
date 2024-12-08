@@ -21,7 +21,7 @@ export default function OurPrograms() {
     ];
   
     return (
-        <section className="py-20 bg-gray-50 dark:bg-gray-900">
+        <section className="py-20 bg-gray-50 dark:bg-gray-900" id="programs">
           <div className="container mx-auto px-6 lg:px-12">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-extrabold text-black dark:text-white">

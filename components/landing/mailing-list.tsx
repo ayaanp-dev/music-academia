@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CheckIcon, ChevronRightIcon } from "lucide-react";
+import { AnimatedSubscribeButton } from "@/components/ui/animated-subscribe-button";
 
 export default function JoinMailingList() {
   return (
@@ -21,12 +23,23 @@ export default function JoinMailingList() {
               required
               className="w-full sm:w-2/3 py-4 px-6 border-gray-300 focus:ring-2 focus:ring-gray-500 rounded-xl text-lg"
             />
-            <Button
-              type="submit"
-              className="w-full sm:w-auto py-4 px-8 bg-black text-white rounded-xl text-lg hover:bg-gray-700 transition-all duration-300 transform hover:scale-105"
-            >
-              Subscribe
-            </Button>
+             <AnimatedSubscribeButton
+      buttonColor="#000000"
+      buttonTextColor="#ffffff"
+      subscribeStatus={false}
+      initialText={
+        <span className="group inline-flex items-center">
+          Subscribe{" "}
+          <ChevronRightIcon className="ml-1 size-4 transition-transform duration-300 group-hover:translate-x-1" />
+        </span>
+      }
+      changeText={
+        <span className="group inline-flex items-center">
+          <CheckIcon className="mr-2 size-4" />
+          Subscribed{" "}
+        </span>
+      }
+    />
           </div>
         </form>
 
