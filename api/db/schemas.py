@@ -1,9 +1,9 @@
-from pydantic import BaseModel
-from typing import List, Optional
+from pydantic import BaseModel, EmailStr
+from typing import List
 
 class StudentBase(BaseModel):
     full_name: str
-    email: str
+    email: EmailStr
     grade_level: int
     instrument: str
     group: str
@@ -18,19 +18,17 @@ class Student(StudentBase):
     id: int
 
     class Config:
-        orm_mode: True
+        orm_mode = True
 
 class ParentBase(BaseModel):
     full_name: str
-    email: str
-    students: List[int]
+    email: EmailStr
 
 class ParentCreate(ParentBase):
-    pass
+    password: str  # Password added for sign-up
 
 class Parent(ParentBase):
     id: int
-    students: List[int] = []
 
     class Config:
-        orm_mode: True
+        orm_mode = True

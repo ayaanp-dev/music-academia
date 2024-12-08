@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 
 export default function SignUpPage() {
-
   const [parentName, setParentName] = useState("");
   const [parentEmail, setParentEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,8 +23,8 @@ export default function SignUpPage() {
     const parentData = {
       full_name: parentName,
       email: parentEmail,
-      students: [], // No students during initial signup
-    };
+      password: password, // Ensure this is included
+    };    
 
     try {
       const response = await fetch("http://localhost:8000/parents/", {
@@ -47,8 +46,8 @@ export default function SignUpPage() {
         const errorData = await response.json();
         alert(`Error: ${errorData.detail || "Something went wrong."}`);
       }
-    } catch (error) {
-      alert(`Network error`);
+    } catch (error: any) {
+      alert(`Network error: ${error.message}`);
     }
   };
 
