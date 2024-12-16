@@ -1,54 +1,63 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-from db import models, schemas
-from db.db import SessionLocal, engine, get_db
-from fastapi.middleware.cors import CORSMiddleware
-import db
-from typing import List
-from db.crud import authenticate_parent
+from . import models, schemas, crud
+from .database import engine, SessionLocal
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# Add CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Update this to match your frontend's origin
-    allow_credentials=True,
-    allow_methods=["*"],  # Allow all HTTP methods
-    allow_headers=["*"],  # Allow all headers
-)
+# Dependency
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-@app.post("/parents/", response_model=schemas.Parent)
-def create_parent(parent: schemas.ParentCreate, database: Session = Depends(get_db)):
-    return db.crud.create_parent(db=database, parent=parent)
+@app.post("/users/")
+def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    return crud.create_user(db, user)
 
-@app.post("/login/")
-def login(email: str, password: str, database: Session = Depends(get_db)):
-    parent = authenticate_parent(db=database, email=email, password=password)
-    if not parent:
-        raise HTTPException(status_code=401, detail="Invalid credentials")
-    return {"message": "Login successful", "parent_id": parent.id}
+@app.put("/users/{user_id}")
+def update_user(user_id: int, user: schemas.UserUpdate, db: Session = Depends(get_db)):
+    updated_user = crud.update_user(db, user_id, user)
+    if not updated_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return updated_user
 
-@app.get("/parents/{parent_id}", response_model=schemas.Parent)
-def read_parent(parent_id: int, database: Session = Depends(get_db)):
-    return db.crud.get_parent(db=database, parent_id=parent_id)
+@app.delete("/users/{user_id}")
+def delete_user(user_id: int, db: Session = Depends(get_db)):
+    deleted_user = crud.delete_user(db, user_id)
+    if not deleted_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return {"detail": "User deleted successfully"}
 
-@app.delete("/students/{student_id}", response_model=schemas.Student)
-def delete_student(student_id: int, database: Session = Depends(get_db)):
-    student = db.crud.delete_student(database, student_id=student_id)
-    return student
+@app.post("/sessions/")
+def create_session(session: schemas.SessionCreate, db: Session = Depends(get_db)):
+    return crud.create_session(db, session)
 
-@app.delete("/parents/{parent_id}", response_model=schemas.Parent)
-def delete_parent(parent_id: int, database: Session = Depends(get_db)):
-    parent = db.crud.delete_parent(database, parent_id=parent_id)
-    return parent
+@app.put("/sessions/{session_id}")
+def update_session(session_id: int, session: schemas.SessionUpdate, db: Session = Depends(get_db)):
+    updated_session = crud.update_session(db, session_id, session)
+    if not updated_session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    return updated_session
 
-@app.put("/students/{student_id}", response_model=schemas.Student)
-def update_student(student_id: int, student: schemas.StudentCreate, database: Session = Depends(get_db)):
-    return db.crud.update_student(database, student_id=student_id, student=student)
+@app.delete("/sessions/{session_id}")
+def delete_session(session_id: int, db: Session = Depends(get_db)):
+    deleted_session = crud.delete_session(db, session_id)
+    if not deleted_session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    return {"detail": "Session deleted successfully"}
 
-@app.put("/parents/{parent_id}", response_model=schemas.Parent)
-def update_parent(parent_id: int, parent: schemas.ParentCreate, database: Session = Depends(get_db)):
-    return db.crud.update_parent(database, parent_id=parent_id, parent=parent)
+@app.post("/feedback/")
+def create_feedback(feedback: schemas.FeedbackCreate, db: Session = Depends(get_db)):
+    return crud.create_feedback(db, feedback)
+
+@app.delete("/feedback/{feedback_id}")
+def delete_feedback(feedback_id: int, db: Session = Depends(get_db)):
+    deleted_feedback = crud.delete_feedback(db, feedback_id)
+    if not deleted_feedback:
+        raise HTTPException(status_code=404, detail="Feedback not found")
+    return {"detail": "Feedback deleted successfully"}
