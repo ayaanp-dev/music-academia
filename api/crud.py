@@ -1,5 +1,17 @@
 from sqlalchemy.orm import Session
 from . import models, schemas
+import smtplib
+from email.mime.text import MIMEText
+
+def send_email(to_email: str, subject: str, body: str):
+    from_email = "contact.musicacademia@gmail.com"
+    msg = MIMEText(body)
+    msg["Subject"] = subject
+    msg["From"] = from_email
+    msg["To"] = to_email
+    s = smtplib.SMTP('localhost')
+    s.sendmail(from_email, [to_email], msg.as_string())
+    s.quit()
 
 def log_action(db: Session, action: str):
     log = models.AuditLog(action=action)
@@ -63,6 +75,13 @@ def update_session(db: Session, session_id: int, session: schemas.SessionUpdate)
     db.commit()
     db.refresh(db_session)
     log_action(db, action=f"Session {db_session.session_id} updated")
+    if db_session.status == models.SessionStatus.CANCELLED:
+        log_action(db, action=f"Session {db_session.session_id} cancelled")
+        send_email(db_session.tutee_id, "Session Cancelled", f"Your session on {db_session.date} at {db_session.time} has been cancelled.")
+        send_email(db_session.tutor_id, "Session Cancelled", f"Your session on {db_session.date} at {db_session.time} has been cancelled.")
+        tutor = db.query(models.Tutor).filter(models.Tutor.tutor_id == db_session.tutor_id).first()
+        teacher = db.query(models.Teacher).filter(models.Teacher.teacher_id == tutor.teacher_id).first()
+        send_email(teacher.user_id, "Session Cancelled", f"Your student's session on {db_session.date} at {db_session.time} has been cancelled.")
     return db_session
 
 def delete_session(db: Session, session_id: int):
