@@ -41,7 +41,7 @@ export default function Testimonials() {
       ];
 
   return (
-    <section className="py-16">
+    <section className="py-16" id="testimonials">
       <div className="container mx-auto px-6 lg:px-12 text-center">
         <h2 className="text-4xl md:text-5xl font-extrabold mb-6">What People Say</h2>
         <p className="text-lg md:text-xl text-gray-600 mb-12">
