@@ -1,10 +1,13 @@
+// /app/dashboard/page.tsx
 import { TutorTuteeTable } from "@/components/peer-tutoring/teacher/TutorTuteeTable";
+import { StudentsTable } from "@/components/peer-tutoring/teacher/StudentsTable";
 import { Card } from "@/components/ui/card";
 import { DashboardChart } from "@/components/peer-tutoring/teacher/DashboardChart";
+import { Button } from "@/components/ui/button";
 import { ReportIssueDialog } from "@/components/ReportIssueDialog";
 
 export default function Dashboard() {
-  const data = [
+  const sessionData = [
     {
       tutee: "John Doe",
       tutor: "Jane Smith",
@@ -16,7 +19,16 @@ export default function Dashboard() {
     },
   ];
 
-  const chartData = [{ label: "Jan", value: 10 }, { label: "Feb", value: 20 }, { label: "Mar", value: 15 }];
+  const studentData = [
+    { name: "Jane Smith", role: "Tutor", sessionsCompleted: 25 },
+    { name: "John Doe", role: "Tutee", sessionsCompleted: 12 },
+  ];
+
+  const chartData = [
+    { label: "Jan", value: 10 },
+    { label: "Feb", value: 20 },
+    { label: "Mar", value: 15 },
+  ];
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -53,7 +65,13 @@ export default function Dashboard() {
         {/* Session Table */}
         <section>
           <h2 className="text-xl font-bold text-gray-800 mb-4">Tutor-Tutee Sessions</h2>
-          <TutorTuteeTable data={data} />
+          <TutorTuteeTable data={sessionData} />
+        </section>
+
+        {/* Students Table */}
+        <section>
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Students Overview</h2>
+          <StudentsTable data={studentData} />
         </section>
       </div>
     </div>
